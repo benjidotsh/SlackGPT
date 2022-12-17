@@ -1,34 +1,38 @@
-/**
- * Some predefined delay values (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
-}
+import Bolt from '@slack/bolt';
+import Config from './config.js';
 
-/**
- * Returns a Promise<string> that resolves after a given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - A number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
-}
+const app = new Bolt.App({
+  token: Config.SLACK_BOT_TOKEN,
+  signingSecret: Config.SLACK_SIGNING_SECRET,
+  socketMode: true,
+  appToken: Config.SLACK_APP_TOKEN,
+  port: Config.PORT,
+});
 
-// Please see the comment in the .eslintrc.json file about the suppressed rule!
-// Below is an example of how to use ESLint errors suppression. You can read more
-// at https://eslint.org/docs/latest/user-guide/configuring/rules#disabling-rules
+app.event('app_mention', async ({ event, say }) => {
+  await say({
+    blocks: [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `Thanks for the mention <@${event.user}>! Here's a button`,
+        },
+        accessory: {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            text: 'Button',
+            emoji: true,
+          },
+          value: 'click_me_123',
+          action_id: 'first_button',
+        },
+      },
+    ],
+  });
+});
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function greeter(name: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-  // The name parameter should be of type string. Any is used only to trigger the rule.
-  return await delayedHello(name, Delays.Long);
-}
+await app.start();
+
+console.log(`🤖 SlackGPT is running on port ${Config.PORT}`);
