@@ -1,4 +1,4 @@
-import { ChatGPTAPIBrowser, ChatResponse } from 'chatgpt';
+import { ChatGPTAPIBrowser, ChatResponse, SendMessageOptions } from 'chatgpt';
 import Config from '../config.js';
 
 const api = new ChatGPTAPIBrowser({
@@ -8,5 +8,8 @@ const api = new ChatGPTAPIBrowser({
 
 await api.initSession();
 
-export const send = (message: string): Promise<ChatResponse> =>
-  api.sendMessage(message);
+export const sendMessage = (
+  message: string,
+  options?: SendMessageOptions,
+): Promise<ChatResponse> =>
+  api.sendMessage(message, { timeoutMs: 1 * 60 * 1000, ...options });
