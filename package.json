@@ -1,7 +1,7 @@
 {
-  "name": "node-typescript-boilerplate",
-  "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
+  "name": "slackgpt",
+  "version": "1.0.0",
+  "description": "Slack bot for ChatGPT",
   "type": "module",
   "engines": {
     "node": ">= 18.12 <19"
@@ -36,8 +36,8 @@
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "jest --watch"
   },
-  "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
-  "license": "Apache-2.0",
+  "author": "Benjamin Janssens <benji.janssens@gmail.com>",
+  "license": "ISC",
   "dependencies": {
     "@slack/bolt": "^3.12.2",
     "chatgpt": "^3.0.0",
