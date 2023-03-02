@@ -1,15 +1,12 @@
-import { ChatGPTAPIBrowser, ChatResponse, SendMessageOptions } from 'chatgpt';
+import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
 import Config from '../config.js';
 
-const api = new ChatGPTAPIBrowser({
-  email: Config.OPENAI_USERNAME,
-  password: Config.OPENAI_PASSWORD,
+const api = new ChatGPTAPI({
+  apiKey: Config.OPENAI_API_KEY,
 });
-
-await api.initSession();
 
 export const sendMessage = (
   message: string,
   options?: SendMessageOptions,
-): Promise<ChatResponse> =>
+): Promise<ChatMessage> =>
   api.sendMessage(message, { timeoutMs: 1 * 60 * 1000, ...options });

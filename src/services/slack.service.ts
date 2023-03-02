@@ -38,11 +38,12 @@ export const addEventHandlers = (app: Bolt.App): void => {
 
     const message = parseSlackMessage(event.text);
 
-    const { response, conversationId, messageId } =
-      await ChatGPTService.sendMessage(message, {
-        conversationId: lastReply?.metadata.event_payload.conversationId,
+    const { text: response, id: messageId } = await ChatGPTService.sendMessage(
+      message,
+      {
         parentMessageId: lastReply?.metadata.event_payload.messageId,
-      });
+      },
+    );
 
     await client.chat.postMessage({
       channel: event.channel,
@@ -51,7 +52,6 @@ export const addEventHandlers = (app: Bolt.App): void => {
       metadata: {
         event_type: 'slackgpt_reply',
         event_payload: {
-          conversationId,
           messageId,
         },
       },

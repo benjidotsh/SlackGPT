@@ -8,6 +8,5 @@ export default cleanEnv(process.env, {
   SLACK_SIGNING_SECRET: str(),
   SLACK_BOT_TOKEN: str(),
   SLACK_APP_TOKEN: str(),
-  OPENAI_USERNAME: str(),
-  OPENAI_PASSWORD: str(),
+  OPENAI_API_KEY: str(),
 });
