@@ -23,7 +23,7 @@
     "elements": [
       {
         "type": "plain_text",
-        "text": "We store your API key securely and only use it to communicate with OpenAI in this workspace."
+        "text": "Your API key is stored securely and is only being used to communicate with OpenAI in this workspace."
       }
     ]
   }

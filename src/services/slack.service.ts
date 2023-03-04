@@ -47,13 +47,13 @@ export default class SlackService {
     this.app.action(
       'set_openai_api_key',
       async ({ client, body, action, context, ack }) => {
+        const { value } = action as Bolt.PlainTextInputAction;
+
         const { user } = await client.users.info({ user: body.user.id });
 
-        if (!user?.is_admin) {
+        if (!value || !user?.is_admin) {
           return ack();
         }
-
-        const { value } = action as Bolt.PlainTextInputAction;
 
         // TODO: Encrypt the API key
 
