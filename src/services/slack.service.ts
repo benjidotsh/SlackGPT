@@ -82,6 +82,6 @@ export default class SlackService {
    * Remove Slack userIds from a message
    */
   private static parseSlackMessage(message: string): string {
-    return message.replace(/<@[UW][A-Z0-9]{2,}>/g, '').trim();
+    return message.replace(/\s*<@[UW][A-Z0-9]{2,}>\s*/g, ' ').trim();
   }
 }
