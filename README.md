@@ -5,6 +5,9 @@
 ### Development
 
 ```bash
+# Set up a development database (requires Docker)
+npm run dev:db
+
 # Run in development mode
 npm run dev
 ```
