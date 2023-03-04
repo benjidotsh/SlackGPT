@@ -1,4 +1,7 @@
 {
+  "execMap": {
+    "ts": "ts-node --esm"
+  },
   "ext": "ts,json",
   "env": {
     "NODE_ENV": "development"

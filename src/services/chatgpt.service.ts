@@ -1,5 +1,5 @@
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
-import config from '../config';
+import config from '../config.js';
 
 export default class ChatGPTService {
   private api: ChatGPTAPI;
