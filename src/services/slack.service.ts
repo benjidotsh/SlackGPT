@@ -1,6 +1,7 @@
 import Bolt from '@slack/bolt';
 import configurationMiddleware from '../middleware/configuration.middleware.js';
 import ChatGPTService from './chatgpt.service.js';
+import prismaService from './prisma.service.js';
 
 interface Metadata {
   event_type: 'slackgpt_reply';
@@ -26,6 +27,66 @@ export default class SlackService {
   }
 
   addEventHandlers(): void {
+    this.app.event('app_home_opened', async ({ event, client }) => {
+      await client.views.publish({
+        user_id: event.user,
+        view: {
+          type: 'home',
+          blocks: [
+            {
+              type: 'header',
+              text: {
+                type: 'plain_text',
+                text: 'Configuration',
+              },
+            },
+            {
+              dispatch_action: true,
+              type: 'input',
+              element: {
+                type: 'plain_text_input',
+                action_id: 'set_openai_api_key',
+              },
+              label: {
+                type: 'plain_text',
+                text: 'OpenAI API Key',
+              },
+            },
+            {
+              type: 'context',
+              elements: [
+                {
+                  type: 'plain_text',
+                  text: 'We store your API key securely and only use it to communicate with OpenAI in this workspace.',
+                },
+              ],
+            },
+          ],
+        },
+      });
+    });
+
+    this.app.action('set_openai_api_key', async ({ action, context, ack }) => {
+      const { value } = action as Bolt.PlainTextInputAction;
+
+      // TODO: Encrypt the API key
+
+      await prismaService.workspace.upsert({
+        where: {
+          id: context.teamId,
+        },
+        update: {
+          openaiApiKey: value,
+        },
+        create: {
+          id: context.teamId as string,
+          openaiApiKey: value,
+        },
+      });
+
+      await ack();
+    });
+
     this.app.event(
       'app_mention',
       configurationMiddleware,
@@ -82,6 +143,14 @@ export default class SlackService {
         });
       }
     );
+
+    this.app.event('app_uninstalled', async ({ context }) => {
+      await prismaService.workspace.delete({
+        where: {
+          id: context.teamId,
+        },
+      });
+    });
   }
 
   /**
