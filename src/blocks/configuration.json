@@ -1,0 +1,30 @@
+[
+  {
+    "type": "header",
+    "text": {
+      "type": "plain_text",
+      "text": "Configuration"
+    }
+  },
+  {
+    "dispatch_action": true,
+    "type": "input",
+    "element": {
+      "type": "plain_text_input",
+      "action_id": "set_openai_api_key"
+    },
+    "label": {
+      "type": "plain_text",
+      "text": "OpenAI API Key"
+    }
+  },
+  {
+    "type": "context",
+    "elements": [
+      {
+        "type": "plain_text",
+        "text": "We store your API key securely and only use it to communicate with OpenAI in this workspace."
+      }
+    ]
+  }
+]

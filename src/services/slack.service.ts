@@ -2,6 +2,7 @@ import Bolt from '@slack/bolt';
 import configurationMiddleware from '../middleware/configuration.middleware.js';
 import ChatGPTService from './chatgpt.service.js';
 import prismaService from './prisma.service.js';
+import { configurationBlocks } from '../blocks/index.js';
 
 interface Metadata {
   event_type: 'slackgpt_reply';
@@ -28,64 +29,50 @@ export default class SlackService {
 
   addEventHandlers(): void {
     this.app.event('app_home_opened', async ({ event, client }) => {
+      const blocks: (Bolt.Block | Bolt.KnownBlock)[] = [];
+
+      // Configuration
+      const { user } = await client.users.info({ user: event.user });
+      if (user?.is_admin) blocks.push(...configurationBlocks);
+
       await client.views.publish({
         user_id: event.user,
         view: {
           type: 'home',
-          blocks: [
-            {
-              type: 'header',
-              text: {
-                type: 'plain_text',
-                text: 'Configuration',
-              },
-            },
-            {
-              dispatch_action: true,
-              type: 'input',
-              element: {
-                type: 'plain_text_input',
-                action_id: 'set_openai_api_key',
-              },
-              label: {
-                type: 'plain_text',
-                text: 'OpenAI API Key',
-              },
-            },
-            {
-              type: 'context',
-              elements: [
-                {
-                  type: 'plain_text',
-                  text: 'We store your API key securely and only use it to communicate with OpenAI in this workspace.',
-                },
-              ],
-            },
-          ],
+          blocks,
         },
       });
     });
 
-    this.app.action('set_openai_api_key', async ({ action, context, ack }) => {
-      const { value } = action as Bolt.PlainTextInputAction;
+    this.app.action(
+      'set_openai_api_key',
+      async ({ client, body, action, context, ack }) => {
+        const { user } = await client.users.info({ user: body.user.id });
 
-      // TODO: Encrypt the API key
+        if (!user?.is_admin) {
+          return ack();
+        }
 
-      await prismaService.workspace.upsert({
-        where: {
-          id: context.teamId,
-        },
-        update: {
-          openaiApiKey: value,
-        },
-        create: {
-          id: context.teamId as string,
-          openaiApiKey: value,
-        },
-      });
+        const { value } = action as Bolt.PlainTextInputAction;
 
-      await ack();
-    });
+        // TODO: Encrypt the API key
+
+        await prismaService.workspace.upsert({
+          where: {
+            id: context.teamId,
+          },
+          update: {
+            openaiApiKey: value,
+          },
+          create: {
+            id: context.teamId as string,
+            openaiApiKey: value,
+          },
+        });
+
+        return ack();
+      }
+    );
 
     this.app.event(
       'app_mention',
