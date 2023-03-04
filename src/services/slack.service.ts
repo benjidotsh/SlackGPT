@@ -3,6 +3,7 @@ import configurationMiddleware from '../middleware/configuration.middleware.js';
 import ChatGPTService from './chatgpt.service.js';
 import prismaService from './prisma.service.js';
 import { configurationBlocks } from '../blocks/index.js';
+import CryptoService from './crypto.service.js';
 
 interface Metadata {
   event_type: 'slackgpt_reply';
@@ -55,18 +56,18 @@ export default class SlackService {
           return ack();
         }
 
-        // TODO: Encrypt the API key
+        const encryptedValue = CryptoService.encrypt(value);
 
         await prismaService.workspace.upsert({
           where: {
             id: context.teamId,
           },
           update: {
-            openaiApiKey: value,
+            openaiApiKey: encryptedValue,
           },
           create: {
             id: context.teamId as string,
-            openaiApiKey: value,
+            openaiApiKey: encryptedValue,
           },
         });
 

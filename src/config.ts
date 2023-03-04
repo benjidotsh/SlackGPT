@@ -11,6 +11,7 @@ export default cleanEnv(process.env, {
     choices: ['development', 'production'],
   }),
   PORT: port({ default: 3000 }),
+  CRYPTO_KEY: str(),
   SLACK_SIGNING_SECRET: str(),
   SLACK_BOT_TOKEN: str(),
   SLACK_APP_TOKEN: str(),
