@@ -1,27 +1,14 @@
 {
   "env": {
-    "browser": false,
-    "es6": true,
+    "es2021": true,
     "node": true
   },
-  "parser": "@typescript-eslint/parser",
+  "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
+  "overrides": [],
   "parserOptions": {
-    "project": "tsconfig.json",
+    "ecmaVersion": "latest",
     "sourceType": "module",
-    "ecmaVersion": 2020
+    "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "jest"],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
-    "prettier"
-  ],
-  "rules": {
-    // The following rule is enabled only to supplement the inline suppression
-    // examples, and because it is not a recommended rule, you should either
-    // disable it, or understand what it enforces.
-    // https://typescript-eslint.io/rules/explicit-function-return-type/
-    "@typescript-eslint/explicit-function-return-type": "warn"
-  }
+  "rules": { "no-console": "off" }
 }

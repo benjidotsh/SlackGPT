@@ -1,0 +1,4 @@
+{
+  "*.ts": "eslint --ignore-path .gitignore --cache --fix",
+  "*.{ts,md,json,yml}": "prettier --ignore-path .gitignore --cache --write"
+}

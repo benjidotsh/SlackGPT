@@ -1,0 +1,45 @@
+image: node:18
+
+pipelines:
+  default:
+    - step:
+        name: Clear cache
+        script:
+          - pipe: atlassian/bitbucket-clear-cache:3.2.0
+            variables:
+              BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+              BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
+              CACHES: ['node']
+        condition:
+          changesets:
+            includePaths:
+              - package-lock.json
+
+    - step:
+        name: Install dependencies
+        caches:
+          - node
+        script:
+          - npm ci
+
+    - parallel:
+        - step:
+            name: Lint
+            caches:
+              - node
+            script:
+              - npm run lint
+
+        - step:
+            name: Test
+            caches:
+              - node
+            script:
+              - npm run test
+
+        - step:
+            name: Build
+            caches:
+              - node
+            script:
+              - npm run build

@@ -1,17 +1,14 @@
-import Bolt from '@slack/bolt';
 import config from './config.js';
-import * as SlackService from './services/slack.service.js';
+import SlackService from './services/slack.service.js';
 
-const app = new Bolt.App({
+const slackService = new SlackService({
   token: config.SLACK_BOT_TOKEN,
   signingSecret: config.SLACK_SIGNING_SECRET,
-  socketMode: config.SLACK_APP_TOKEN ? true : false,
+  socketMode: !!config.SLACK_APP_TOKEN,
   appToken: config.SLACK_APP_TOKEN,
   port: config.PORT,
 });
 
-SlackService.addEventHandlers(app);
-
-await app.start();
+slackService.start();
 
 console.log(`🤖 SlackGPT is running on port ${config.PORT}`);

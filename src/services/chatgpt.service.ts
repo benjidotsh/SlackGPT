@@ -1,12 +1,22 @@
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
-import Config from '../config.js';
+import config from '../config';
 
-const api = new ChatGPTAPI({
-  apiKey: Config.OPENAI_API_KEY,
-});
+export default class ChatGPTService {
+  private api: ChatGPTAPI;
 
-export const sendMessage = (
-  message: string,
-  options?: SendMessageOptions,
-): Promise<ChatMessage> =>
-  api.sendMessage(message, { timeoutMs: 1 * 60 * 1000, ...options });
+  constructor() {
+    this.api = new ChatGPTAPI({
+      apiKey: config.OPENAI_API_KEY,
+    });
+  }
+
+  sendMessage(
+    message: string,
+    options?: SendMessageOptions
+  ): Promise<ChatMessage> {
+    return this.api.sendMessage(message, {
+      timeoutMs: 1 * 60 * 1000,
+      ...options,
+    });
+  }
+}

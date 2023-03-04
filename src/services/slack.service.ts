@@ -1,60 +1,87 @@
 import Bolt from '@slack/bolt';
-import * as ChatGPTService from './chatgpt.service.js';
+import ChatGPTService from './chatgpt.service.js';
 
-/**
- * Remove Slack userIds from a message
- */
-const parseSlackMessage = (message: string): string =>
-  message.replace(/<@[UW][A-Z0-9]{2,}>/g, '').trim();
+interface Metadata {
+  event_type: 'slackgpt_reply';
+  event_payload: {
+    messageId: string;
+  };
+}
 
-export const addEventHandlers = (app: Bolt.App): void => {
-  app.event('app_mention', async ({ event, client }) => {
-    let lastReply;
+export default class SlackService {
+  private app: Bolt.App;
 
-    if (event.thread_ts) {
-      let replies = await client.conversations.replies({
-        channel: event.channel,
-        ts: event.thread_ts,
-        include_all_metadata: true,
-      });
+  private chatGPTService: ChatGPTService;
 
-      let messages = replies.messages;
+  constructor(options: Bolt.AppOptions) {
+    this.app = new Bolt.App(options);
+    this.addEventHandlers();
 
-      while (replies.has_more) {
-        replies = await client.conversations.replies({
+    this.chatGPTService = new ChatGPTService();
+  }
+
+  start() {
+    return this.app.start();
+  }
+
+  addEventHandlers(): void {
+    this.app.event('app_mention', async ({ event, client }) => {
+      let parentMessageId: string | undefined;
+
+      if (event.thread_ts) {
+        let replies = await client.conversations.replies({
           channel: event.channel,
           ts: event.thread_ts,
           include_all_metadata: true,
-          cursor: replies.response_metadata.next_cursor,
         });
 
-        messages = messages.concat(replies.messages);
+        let { messages = [] } = replies;
+
+        while (replies.has_more) {
+          // eslint-disable-next-line no-await-in-loop
+          replies = await client.conversations.replies({
+            channel: event.channel,
+            ts: event.thread_ts,
+            include_all_metadata: true,
+            cursor: replies.response_metadata?.next_cursor,
+          });
+
+          messages = messages.concat(replies.messages || []);
+        }
+
+        const parentMessageMetadata = messages
+          .reverse()
+          .find((message) => message.metadata?.event_type === 'slackgpt_reply')
+          ?.metadata as Metadata | undefined;
+
+        parentMessageId = parentMessageMetadata?.event_payload.messageId;
       }
 
-      lastReply = messages
-        .reverse()
-        .find((message) => message.metadata?.event_type === 'slackgpt_reply');
-    }
+      const message = SlackService.parseSlackMessage(event.text);
 
-    const message = parseSlackMessage(event.text);
+      const { text: response, id: messageId } =
+        await this.chatGPTService.sendMessage(message, {
+          parentMessageId,
+        });
 
-    const { text: response, id: messageId } = await ChatGPTService.sendMessage(
-      message,
-      {
-        parentMessageId: lastReply?.metadata.event_payload.messageId,
-      },
-    );
-
-    await client.chat.postMessage({
-      channel: event.channel,
-      thread_ts: event.thread_ts || event.ts,
-      text: response,
-      metadata: {
-        event_type: 'slackgpt_reply',
-        event_payload: {
-          messageId,
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts || event.ts,
+        text: response,
+        metadata: {
+          event_type: 'slackgpt_reply',
+          event_payload: {
+            messageId,
+          },
         },
-      },
+      });
     });
-  });
-};
+  }
+
+  /**
+   * Remove Slack userIds from a message
+   */
+  private static parseSlackMessage(message: string): string {
+    return message.replace(/<@[UW][A-Z0-9]{2,}>/g, '').trim();
+  }
+}
