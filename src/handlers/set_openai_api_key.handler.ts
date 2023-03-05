@@ -6,13 +6,15 @@ import { Handler } from './index.js';
 const setOpenaiApiKeyHandler: Handler = {
   name: 'set_openai_api_key',
   type: 'action',
-  handler: async ({ client, body, action, context, ack }) => {
+  handler: async ({ ack, client, body, action, context }) => {
+    await ack();
+
     const { value } = action as Bolt.PlainTextInputAction;
 
     const { user } = await client.users.info({ user: body.user.id });
 
     if (!value || !user?.is_admin) {
-      return ack();
+      return;
     }
 
     const encryptedValue = CryptoService.encrypt(value);
@@ -29,8 +31,6 @@ const setOpenaiApiKeyHandler: Handler = {
         openaiApiKey: encryptedValue,
       },
     });
-
-    return ack();
   },
 };
 

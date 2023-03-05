@@ -1,12 +1,11 @@
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
-import config from '../config.js';
 
 export default class ChatGPTService {
   private api: ChatGPTAPI;
 
-  constructor() {
+  constructor(apiKey: string) {
     this.api = new ChatGPTAPI({
-      apiKey: config.OPENAI_API_KEY,
+      apiKey,
     });
   }
 

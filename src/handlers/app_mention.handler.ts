@@ -1,3 +1,4 @@
+import { Workspace } from '@prisma/client';
 import ChatGPTService from '../services/chatgpt.service.js';
 import SlackService from '../services/slack.service.js';
 import { Handler } from './index.js';
@@ -12,7 +13,7 @@ interface Metadata {
 const appMentionHandler: Handler<'app_mention'> = {
   name: 'app_mention',
   type: 'event',
-  handler: async ({ event, client }) => {
+  handler: async ({ event, client, context }) => {
     let parentMessageId: string | undefined;
 
     if (event.thread_ts) {
@@ -46,10 +47,13 @@ const appMentionHandler: Handler<'app_mention'> = {
 
     const message = SlackService.parseSlackMessage(event.text);
 
-    const { text: response, id: messageId } =
-      await new ChatGPTService().sendMessage(message, {
-        parentMessageId,
-      });
+    const { openaiApiKey } = context.workspace as Workspace;
+
+    const { text: response, id: messageId } = await new ChatGPTService(
+      openaiApiKey
+    ).sendMessage(message, {
+      parentMessageId,
+    });
 
     await client.chat.postMessage({
       channel: event.channel,

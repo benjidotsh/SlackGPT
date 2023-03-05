@@ -1,9 +1,11 @@
 import Bolt from '@slack/bolt';
+import CryptoService from '../services/crypto.service.js';
 import prismaService from '../services/prisma.service.js';
 
 export default async function openaiMiddleware({
   event,
   client,
+  context,
   next,
 }: Bolt.SlackEventMiddlewareArgs<'app_mention'> & Bolt.AllMiddlewareArgs) {
   const workspace = await prismaService.workspace.findUnique({
@@ -17,7 +19,13 @@ export default async function openaiMiddleware({
       user: event.user as string,
       thread_ts: event.thread_ts,
     });
+
+    return;
   }
 
-  next();
+  workspace.openaiApiKey = CryptoService.decrypt(workspace.openaiApiKey);
+
+  context.workspace = workspace;
+
+  await next();
 }
