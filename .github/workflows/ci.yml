@@ -47,6 +47,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # App environment variables
+          AWS_REGION: ${{ vars.AWS_REGION}}
           NODE_ENV: ${{ vars.NODE_ENV }}
           CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
           SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
