@@ -1,0 +1,46 @@
+service: slackgpt
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+provider:
+  name: aws
+  stage: prod
+  region: eu-west-1
+  runtime: nodejs18.x
+  deploymentMethod: direct
+
+functions:
+  slack:
+    handler: 'src/index.handler'
+    events:
+      - http:
+          path: slack/events
+          method: post
+
+resources:
+  Resources:
+    WorkspaceTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Workspace
+        AttributeDefinitions:
+          - AttributeName: Id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: Id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      migrate: true

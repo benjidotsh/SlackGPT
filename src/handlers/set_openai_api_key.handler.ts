@@ -1,6 +1,6 @@
 import Bolt from '@slack/bolt';
 import CryptoService from '../services/crypto.service.js';
-import prismaService from '../services/prisma.service.js';
+import { Table, updateItem } from '../services/dynamodb/index.js';
 import { Handler } from './index.js';
 
 const setOpenaiApiKeyHandler: Handler = {
@@ -19,18 +19,11 @@ const setOpenaiApiKeyHandler: Handler = {
 
     const encryptedValue = CryptoService.encrypt(value);
 
-    await prismaService.workspace.upsert({
-      where: {
-        id: context.teamId,
-      },
-      update: {
-        openaiApiKey: encryptedValue,
-      },
-      create: {
-        id: context.teamId as string,
-        openaiApiKey: encryptedValue,
-      },
-    });
+    await updateItem(
+      Table.Workspace,
+      { Id: context.teamId },
+      { OpenAiApiKey: encryptedValue }
+    );
   },
 };
 

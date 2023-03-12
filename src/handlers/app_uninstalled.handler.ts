@@ -1,4 +1,4 @@
-import prismaService from '../services/prisma.service.js';
+import { deleteItem, Table } from '../services/dynamodb/index.js';
 import { Handler } from './index.js';
 
 const appUninstalledHandler: Handler = {
@@ -7,11 +7,7 @@ const appUninstalledHandler: Handler = {
   handler: async ({ ack, context }) => {
     await ack();
 
-    await prismaService.workspace.delete({
-      where: {
-        id: context.teamId,
-      },
-    });
+    await deleteItem(Table.Workspace, { Id: context.teamId });
   },
 };
 

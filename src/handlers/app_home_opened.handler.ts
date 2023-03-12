@@ -1,19 +1,18 @@
 import Bolt from '@slack/bolt';
-import prismaService from '../services/prisma.service.js';
+import { getItem, Table, Workspace } from '../services/dynamodb/index.js';
 import { configurationBlocks } from '../blocks/index.js';
 import { Handler } from './index.js';
 
 const appHomeOpenedHandler: Handler<'app_home_opened'> = {
   name: 'app_home_opened',
   type: 'event',
-  handler: async ({ event, client, context, ...rest }) => {
-    console.dir({ event, context, rest });
+  handler: async ({ event, client, context }) => {
     const blocks: (Bolt.Block | Bolt.KnownBlock)[] = [];
 
     // Configuration
     const { user } = await client.users.info({ user: event.user });
-    const workspace = await prismaService.workspace.findFirst({
-      where: { id: context.teamId },
+    const workspace = await getItem<Workspace>(Table.Workspace, {
+      Id: context.teamId,
     });
     if (user?.is_admin) blocks.push(...configurationBlocks(!!workspace));
 

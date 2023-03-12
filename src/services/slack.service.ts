@@ -6,17 +6,28 @@ import {
   appUninstalledHandler,
   setOpenaiApiKeyHandler,
 } from '../handlers/index.js';
+import config from '../config.js';
 
 export default class SlackService {
+  private receiver: Bolt.AwsLambdaReceiver;
+
   private app: Bolt.App;
 
-  constructor(options: Bolt.AppOptions) {
-    this.app = new Bolt.App(options);
+  constructor() {
+    this.receiver = new Bolt.AwsLambdaReceiver({
+      signingSecret: config.SLACK_SIGNING_SECRET,
+    });
+
+    this.app = new Bolt.App({
+      receiver: this.receiver,
+      token: config.SLACK_BOT_TOKEN,
+    });
+
     this.registerHandlers();
   }
 
   start() {
-    return this.app.start();
+    return this.receiver.start();
   }
 
   registerHandlers(): void {

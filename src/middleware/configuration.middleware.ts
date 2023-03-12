@@ -1,6 +1,6 @@
 import Bolt from '@slack/bolt';
 import CryptoService from '../services/crypto.service.js';
-import prismaService from '../services/prisma.service.js';
+import { getItem, Workspace, Table } from '../services/dynamodb/index.js';
 
 export default async function openaiMiddleware({
   event,
@@ -8,8 +8,8 @@ export default async function openaiMiddleware({
   context,
   next,
 }: Bolt.SlackEventMiddlewareArgs<'app_mention'> & Bolt.AllMiddlewareArgs) {
-  const workspace = await prismaService.workspace.findUnique({
-    where: { id: event.team },
+  const workspace = await getItem<Workspace>(Table.Workspace, {
+    Id: event.team,
   });
 
   if (!workspace) {
@@ -23,7 +23,7 @@ export default async function openaiMiddleware({
     return;
   }
 
-  workspace.openaiApiKey = CryptoService.decrypt(workspace.openaiApiKey);
+  workspace.OpenAiApiKey = CryptoService.decrypt(workspace.OpenAiApiKey);
 
   context.workspace = workspace;
 
