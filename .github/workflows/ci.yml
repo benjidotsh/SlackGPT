@@ -43,7 +43,8 @@ jobs:
         with:
           args: deploy
         env:
-          NODE_ENV: production
+          NODE_ENV: ${{ env.NODE_ENV }}
+          AWS_REGION: ${{ env.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
