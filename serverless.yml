@@ -12,9 +12,6 @@ provider:
   deploymentMethod: direct
   environment:
     NODE_ENV: ${env:NODE_ENV}
-    AWS_REGION: ${env:AWS_REGION}
-    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
     CRYPTO_KEY: ${env:CRYPTO_KEY}
     SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
