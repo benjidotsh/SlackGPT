@@ -1,5 +1,14 @@
 # SlackGPT
 
+## Installation
+
+```bash
+# Install serverless-dynamodb-local
+serverless dynamodb install
+```
+
+> :warning: This is currently broken: [Error getting DynamoDb local latest tar.gz location undefined: 403](https://github.com/99x/serverless-dynamodb-local/issues/294)
+
 ## Usage
 
 ```bash

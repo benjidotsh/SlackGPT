@@ -24,16 +24,16 @@ export default cleanEnv(process.env, {
     default: 'development',
     choices: ['development', 'production'],
   }),
-  DYNAMODB_REGION: str({ devDefault: 'localhost' }),
-  DYNAMODB_ENDPOINT: url({
+  AWS_REGION: str({ default: 'eu-west-1', devDefault: 'localhost' }),
+  AWS_ENDPOINT: url({
     default: undefined,
     devDefault: 'http://localhost:8000',
   }),
-  DYNAMODB_ACCESS_KEY_ID: str({
+  AWS_ACCESS_KEY_ID: str({
     default: undefined,
     devDefault: 'DEFAULT_ACCESS_KEY',
   }),
-  DYNAMODB_SECRET_ACCESS_KEY: str({
+  AWS_SECRET_ACCESS_KEY: str({
     default: undefined,
     devDefault: 'DEFAULT_SECRET',
   }),

@@ -1,6 +1,9 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.ref }}
@@ -11,6 +14,7 @@ jobs:
     name: CI
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Check out code
@@ -33,3 +37,15 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Deploy
+        uses: serverless/github-action@v3.1
+        with:
+          args: deploy
+        env:
+          NODE_ENV: production
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

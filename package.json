@@ -9,8 +9,7 @@
     "build": "rimraf dist && tsc --project tsconfig.build.json",
     "lint": "eslint --ignore-path .gitignore",
     "test": "jest --passWithNoTests",
-    "prepare": "husky install",
-    "postinstall": "serverless dynamodb install"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",

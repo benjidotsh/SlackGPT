@@ -1,6 +1,6 @@
 import Bolt from '@slack/bolt';
 import CryptoService from '../services/crypto.service.js';
-import { Table, updateItem } from '../services/dynamodb/index.js';
+import { Table, updateItem, Workspace } from '../services/dynamodb/index.js';
 import { Handler } from './index.js';
 
 const setOpenaiApiKeyHandler: Handler = {
@@ -19,7 +19,7 @@ const setOpenaiApiKeyHandler: Handler = {
 
     const encryptedValue = CryptoService.encrypt(value);
 
-    await updateItem(
+    await updateItem<Workspace>(
       Table.Workspace,
       { Id: context.teamId },
       { OpenAiApiKey: encryptedValue }

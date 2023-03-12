@@ -5,11 +5,11 @@ import { prefixObjectKeys } from '../../utils/index.js';
 import { Table } from './dynamodb.interface.js';
 
 const client = new DynamoDBClient({
-  region: config.DYNAMODB_REGION,
-  endpoint: config.DYNAMODB_ENDPOINT,
+  region: config.AWS_REGION,
+  endpoint: config.AWS_ENDPOINT,
   credentials: {
-    accessKeyId: config.DYNAMODB_ACCESS_KEY_ID,
-    secretAccessKey: config.DYNAMODB_SECRET_ACCESS_KEY,
+    accessKeyId: config.AWS_ACCESS_KEY_ID,
+    secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
   },
 });
 const document = DynamoDBDocument.from(client);

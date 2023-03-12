@@ -1,4 +1,4 @@
-import { deleteItem, Table } from '../services/dynamodb/index.js';
+import { deleteItem, Table, Workspace } from '../services/dynamodb/index.js';
 import { Handler } from './index.js';
 
 const appUninstalledHandler: Handler = {
@@ -7,7 +7,7 @@ const appUninstalledHandler: Handler = {
   handler: async ({ ack, context }) => {
     await ack();
 
-    await deleteItem(Table.Workspace, { Id: context.teamId });
+    await deleteItem<Workspace>(Table.Workspace, { Id: context.teamId });
   },
 };
 
