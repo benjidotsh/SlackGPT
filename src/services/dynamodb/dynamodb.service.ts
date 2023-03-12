@@ -6,11 +6,13 @@ import { Table } from './dynamodb.interface.js';
 
 const client = new DynamoDBClient({
   region: config.AWS_REGION,
-  endpoint: config.AWS_ENDPOINT,
-  credentials: {
-    accessKeyId: config.AWS_ACCESS_KEY_ID,
-    secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
-  },
+  ...(config.isDevelopment && {
+    endpoint: config.AWS_ENDPOINT,
+    credentials: {
+      accessKeyId: config.AWS_ACCESS_KEY_ID,
+      secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+    },
+  }),
 });
 const document = DynamoDBDocument.from(client);
 
