@@ -7,10 +7,10 @@ import { Table } from './dynamodb.interface.js';
 const client = new DynamoDBClient({
   region: config.AWS_REGION,
   ...(config.isDevelopment && {
-    endpoint: config.AWS_ENDPOINT,
+    endpoint: 'http://localhost:8000',
     credentials: {
-      accessKeyId: config.AWS_ACCESS_KEY_ID,
-      secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+      accessKeyId: 'DEFAULT_ACCESS_KEY',
+      secretAccessKey: 'DEFAULT_SECRET',
     },
   }),
 });

@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { cleanEnv, makeValidator, str, url } from 'envalid';
+import { cleanEnv, makeValidator, str } from 'envalid';
 
 dotenv.config();
 
@@ -25,18 +25,6 @@ export default cleanEnv(process.env, {
     choices: ['development', 'production'],
   }),
   AWS_REGION: str({ default: 'eu-west-1', devDefault: 'localhost' }),
-  AWS_ENDPOINT: url({
-    default: undefined,
-    devDefault: 'http://localhost:8000',
-  }),
-  AWS_ACCESS_KEY_ID: str({
-    default: undefined,
-    devDefault: 'DEFAULT_ACCESS_KEY',
-  }),
-  AWS_SECRET_ACCESS_KEY: str({
-    default: undefined,
-    devDefault: 'DEFAULT_SECRET',
-  }),
   CRYPTO_KEY: encryptionKey({
     desc: 'Key used for encryption and decryption',
     devDefault: '?D(G+KbPeShVmYp3s6v9y$B&E)H@McQf',
