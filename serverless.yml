@@ -17,6 +17,7 @@ provider:
     SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
   custom:
     workspaceTableName: ${self:service}-${self:provider.stage}-workspace
+    workspaceTableResource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.workspaceTableName}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -24,7 +25,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${env:AWS_REGION, self:provider.region}:*:table/${self:custom.workspaceTableName}'
+      Resource: ${self:custom.workspaceTableResource}
 
 functions:
   slack:
