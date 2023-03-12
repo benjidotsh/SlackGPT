@@ -17,7 +17,7 @@ provider:
     SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
   custom:
     workspaceTableName: ${self:service}-${self:provider.stage}-workspace
-    workspaceTableResource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.workspaceTableName}
+    workspaceTableResource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.workspaceTableName}'
   iamRoleStatements:
     - Effect: Allow
       Action:
