@@ -15,9 +15,6 @@ provider:
     CRYPTO_KEY: ${env:CRYPTO_KEY}
     SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
-  custom:
-    workspaceTableName: ${self:service}-${self:provider.stage}-workspace
-    workspaceTableResource: 'arn:aws:dynamodb:${opt:region, env:AWS_REGION}:*:table/${self:custom.workspaceTableName}'
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -25,7 +22,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: ${self:custom.workspaceTableResource}
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:resources.Resources.WorkspaceTable.Properties.TableName}
 
 functions:
   slack:
@@ -40,7 +37,7 @@ resources:
     WorkspaceTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.workspaceTableName}
+        TableName: ${self:service}-${self:provider.stage}-workspace
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
