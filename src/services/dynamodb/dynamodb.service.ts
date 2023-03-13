@@ -14,7 +14,9 @@ const client = new DynamoDBClient({
     },
   }),
 });
-const document = DynamoDBDocument.from(client);
+const document = DynamoDBDocument.from(client, {
+  marshallOptions: { removeUndefinedValues: true },
+});
 
 export async function getItem<T>(
   table: Table,
