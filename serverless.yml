@@ -6,7 +6,7 @@ useDotenv: true
 
 provider:
   name: aws
-  stage: prod
+  stage: ${env:NODE_ENV}
   region: ${env:AWS_REGION}
   runtime: nodejs18.x
   deploymentMethod: direct
@@ -37,7 +37,7 @@ resources:
     WorkspaceTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-workspace
+        TableName: ${self:service}-${opt:stage, self:provider.stage}-workspace
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S
@@ -54,6 +54,6 @@ plugins:
 custom:
   dynamodb:
     stages:
-      - dev
+      - development
     start:
       migrate: true

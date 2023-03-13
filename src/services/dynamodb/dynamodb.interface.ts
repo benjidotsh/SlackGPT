@@ -1,5 +1,5 @@
 export enum Table {
-  Workspace = 'Workspace',
+  Workspace = 'workspace',
 }
 
 export type Workspace = {

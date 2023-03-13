@@ -1,7 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import config from '../../config.js';
-import { prefixObjectKeys } from '../../utils/index.js';
+import { getTableName, prefixObjectKeys } from '../../utils/index.js';
 import { Table } from './dynamodb.interface.js';
 
 const client = new DynamoDBClient({
@@ -21,7 +21,7 @@ export async function getItem<T>(
   key: Partial<T>
 ): Promise<T | undefined> {
   const { Item } = await document.get({
-    TableName: table,
+    TableName: getTableName(table),
     Key: key,
   });
   return Item as T | undefined;
@@ -32,7 +32,7 @@ export async function putItem<T extends Record<string, unknown>>(
   data: T
 ) {
   await document.put({
-    TableName: table,
+    TableName: getTableName(table),
     Item: data,
   });
 }
@@ -43,7 +43,7 @@ export async function updateItem<T>(
   data: Partial<T>
 ) {
   await document.update({
-    TableName: table,
+    TableName: getTableName(table),
     Key: key,
     UpdateExpression: `set ${Object.keys(data)
       .map((k) => `${k} = :${k}`)
@@ -54,7 +54,7 @@ export async function updateItem<T>(
 
 export async function deleteItem<T>(table: Table, key: Partial<T>) {
   await document.delete({
-    TableName: table,
+    TableName: getTableName(table),
     Key: key,
   });
 }

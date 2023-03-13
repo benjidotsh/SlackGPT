@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+export * from './dynamodb.js';
 
 export function prefixObjectKeys(
   object: object,

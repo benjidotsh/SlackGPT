@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm:dev:*\"",
-    "dev:sls": "serverless offline start --stage dev",
+    "dev:sls": "serverless offline start --stage development",
     "dev:ngrok": "ngrok http 3000 --log=stdout",
     "build": "rimraf dist && tsc --project tsconfig.build.json",
     "lint": "eslint --ignore-path .gitignore",
