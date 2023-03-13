@@ -11,10 +11,12 @@ const appHomeOpenedHandler: Handler<'app_home_opened'> = {
 
     // Configuration
     const { user } = await client.users.info({ user: event.user });
+    // TODO: Retrieve teamId from installation data
     const workspace = await getItem<Workspace>(Table.Workspace, {
       Id: context.teamId,
     });
-    if (user?.is_admin) blocks.push(...configurationBlocks(!!workspace));
+    if (user?.is_admin)
+      blocks.push(...configurationBlocks(!!workspace?.OpenAiApiKey));
 
     await client.views.publish({
       user_id: event.user,

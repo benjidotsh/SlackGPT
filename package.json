@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm:dev:*\"",
-    "dev:sls": "serverless offline start --stage development",
+    "dev:sls": "serverless offline start --noPrependStageInUrl",
     "dev:ngrok": "ngrok http 3000 --log=stdout",
     "build": "rimraf dist && tsc --project tsconfig.build.json",
     "lint": "eslint --ignore-path .gitignore",
@@ -29,6 +29,7 @@
     "@aws-sdk/client-dynamodb": "^3.287.0",
     "@aws-sdk/lib-dynamodb": "^3.287.0",
     "@slack/bolt": "^3.12.2",
+    "@vendia/serverless-express": "^4.10.1",
     "chatgpt": "^5.0.6",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",

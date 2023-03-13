@@ -30,5 +30,7 @@ export default cleanEnv(process.env, {
     devDefault: '?D(G+KbPeShVmYp3s6v9y$B&E)H@McQf',
   }),
   SLACK_SIGNING_SECRET: str(),
-  SLACK_BOT_TOKEN: str(),
+  SLACK_CLIENT_ID: str(),
+  SLACK_CLIENT_SECRET: str(),
+  SLACK_STATE_SECRET: str({ devDefault: 'NcRfUjXn2r5u8x/A?D(G-KaPdSgVkYp3' }),
 });

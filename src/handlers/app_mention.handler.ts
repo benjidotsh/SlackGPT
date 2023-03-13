@@ -47,7 +47,9 @@ const appMentionHandler: Handler<'app_mention'> = {
 
     const message = SlackService.parseSlackMessage(event.text);
 
-    const { OpenAiApiKey } = context.workspace as Workspace;
+    const { OpenAiApiKey } = context.workspace as Workspace & {
+      OpenAiApiKey: string;
+    };
 
     const { text: response, id: messageId } = await new ChatGPTService(
       OpenAiApiKey

@@ -14,7 +14,9 @@ provider:
     NODE_ENV: ${env:NODE_ENV}
     CRYPTO_KEY: ${env:CRYPTO_KEY}
     SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
-    SLACK_BOT_TOKEN: ${env:SLACK_BOT_TOKEN}
+    SLACK_CLIENT_ID: ${env:SLACK_CLIENT_ID}
+    SLACK_CLIENT_SECRET: ${env:SLACK_CLIENT_SECRET}
+    SLACK_STATE_SECRET: ${env:SLACK_STATE_SECRET}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -31,6 +33,12 @@ functions:
       - http:
           path: slack/events
           method: post
+      - http:
+          path: slack/install
+          method: get
+      - http:
+          path: slack/oauth_redirect
+          method: get
 
 resources:
   Resources:

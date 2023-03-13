@@ -7,6 +7,7 @@ const appUninstalledHandler: Handler = {
   handler: async ({ ack, context }) => {
     await ack();
 
+    // TODO: Retrieve teamId from installation data
     await deleteItem<Workspace>(Table.Workspace, { Id: context.teamId });
   },
 };

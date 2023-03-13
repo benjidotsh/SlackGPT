@@ -12,7 +12,7 @@ export default async function openaiMiddleware({
     Id: event.team,
   });
 
-  if (!workspace) {
+  if (!workspace?.OpenAiApiKey) {
     client.chat.postEphemeral({
       text: 'SlackGPT is not configured in this workspace yet. Please contact your workspace admin.',
       channel: event.channel,

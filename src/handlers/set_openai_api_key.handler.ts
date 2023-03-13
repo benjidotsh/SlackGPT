@@ -19,6 +19,7 @@ const setOpenaiApiKeyHandler: Handler = {
 
     const encryptedValue = CryptoService.encrypt(value);
 
+    // TODO: Retrieve teamId from installation data
     await updateItem<Workspace>(
       Table.Workspace,
       { Id: context.teamId },
