@@ -4,7 +4,7 @@ import { configurationMiddleware } from '../middleware/index.js';
 import {
   appHomeOpenedHandler,
   appMentionHandler,
-  // appUninstalledHandler,
+  appUninstalledHandler,
   setOpenaiApiKeyHandler,
 } from '../handlers/index.js';
 import config from '../config.js';
@@ -119,8 +119,7 @@ export default class SlackService {
       configurationMiddleware,
       appMentionHandler.handler
     );
-    // TODO: Check if the installation store handles this
-    // this.app.action(appUninstalledHandler.name, appUninstalledHandler.handler);
+    this.app.action(appUninstalledHandler.name, appUninstalledHandler.handler);
   }
 
   /**
