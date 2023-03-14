@@ -102,7 +102,10 @@ export default class SlackService {
 
     this.registerHandlers();
 
-    this._handler = serverlessExpress.configure({ app: this.receiver.app });
+    this._handler = serverlessExpress.configure({
+      app: this.receiver.app,
+      logSettings: { level: 'debug' },
+    });
   }
 
   get handler(): unknown {
