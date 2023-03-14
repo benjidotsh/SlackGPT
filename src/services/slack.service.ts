@@ -92,11 +92,11 @@ export default class SlackService {
       installerOptions: {
         directInstall: true,
       },
+      processBeforeResponse: true,
     });
 
     this.app = new Bolt.App({
       receiver: this.receiver,
-      processBeforeResponse: true,
     });
 
     this.registerHandlers();

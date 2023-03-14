@@ -27,7 +27,7 @@ export default cleanEnv(process.env, {
   AWS_REGION: str({ default: 'eu-west-1', devDefault: 'localhost' }),
   CRYPTO_KEY: encryptionKey({
     desc: 'Key used for encryption and decryption',
-    devDefault: '?D(G+KbPeShVmYp3s6v9y$B&E)H@McQf',
+    devDefault: '?D(G+KbPeShVmYp3s6v9y&B&E)H@McQf',
   }),
   SLACK_SIGNING_SECRET: str(),
   SLACK_CLIENT_ID: str(),
