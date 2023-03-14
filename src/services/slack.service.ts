@@ -93,6 +93,7 @@ export default class SlackService {
         directInstall: true,
       },
       processBeforeResponse: true,
+      logLevel: Bolt.LogLevel.DEBUG,
     });
 
     this.app = new Bolt.App({
