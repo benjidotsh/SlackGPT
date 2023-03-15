@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv-safe';
-import { cleanEnv, makeValidator, port, str } from 'envalid';
+import { cleanEnv, makeValidator, port, str, url } from 'envalid';
 
 dotenv.config({ allowEmptyValues: true });
 
@@ -33,4 +33,7 @@ export default cleanEnv(process.env, {
   SLACK_CLIENT_SECRET: str(),
   SLACK_STATE_SECRET: str({ devDefault: 'NcRfUjXn2r5u8x/A?D(G-KaPdSgVkYp3' }),
   PORT: port({ default: 3000 }),
+  DATABASE_URL: url({
+    devDefault: 'postgresql://postgres:postgres@localhost/slackgpt',
+  }),
 });

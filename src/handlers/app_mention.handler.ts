@@ -1,6 +1,5 @@
-import { Workspace } from '../services/dynamodb/index.js';
-import ChatGPTService from '../services/chatgpt.service.js';
-import SlackService from '../services/slack/index.js';
+import { Workspace } from '@prisma/client';
+import { ChatGPTService, SlackService } from '../services/index.js';
 import { Handler } from './index.js';
 
 interface Metadata {
@@ -47,12 +46,12 @@ const appMentionHandler: Handler<'app_mention'> = {
 
     const message = SlackService.parseSlackMessage(event.text);
 
-    const { OpenAiApiKey } = context.workspace as Workspace & {
-      OpenAiApiKey: string;
+    const { apiKey } = context.workspace as Workspace & {
+      apiKey: string;
     };
 
     const { text: response, id: messageId } = await new ChatGPTService(
-      OpenAiApiKey
+      apiKey
     ).sendMessage(message, {
       parentMessageId,
     });

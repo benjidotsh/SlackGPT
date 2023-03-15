@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import config from './config.js';
 import { SlackService } from './services/slack/index.js';
 

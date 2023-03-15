@@ -1,6 +1,5 @@
 import Bolt from '@slack/bolt';
-import CryptoService from '../services/crypto.service.js';
-import { getItem, Workspace, Table } from '../services/dynamodb/index.js';
+import { CryptoService, prismaService } from '../services/index.js';
 
 export default async function openaiMiddleware({
   event,
@@ -8,11 +7,13 @@ export default async function openaiMiddleware({
   context,
   next,
 }: Bolt.SlackEventMiddlewareArgs<'app_mention'> & Bolt.AllMiddlewareArgs) {
-  const workspace = await getItem<Workspace>(Table.Workspace, {
-    Id: event.team,
+  const workspace = await prismaService.workspace.findUnique({
+    where: {
+      id: event.team,
+    },
   });
 
-  if (!workspace?.OpenAiApiKey) {
+  if (!workspace?.apiKey) {
     client.chat.postEphemeral({
       text: 'SlackGPT is not configured in this workspace yet. Please contact your workspace admin.',
       channel: event.channel,
@@ -23,7 +24,7 @@ export default async function openaiMiddleware({
     return;
   }
 
-  workspace.OpenAiApiKey = CryptoService.decrypt(workspace.OpenAiApiKey);
+  workspace.apiKey = CryptoService.decrypt(workspace.apiKey);
 
   context.workspace = workspace;
 
