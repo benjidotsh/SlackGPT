@@ -1,6 +1,6 @@
 import { Workspace } from '../services/dynamodb/index.js';
 import ChatGPTService from '../services/chatgpt.service.js';
-import SlackService from '../services/slack.service.js';
+import SlackService from '../services/slack/index.js';
 import { Handler } from './index.js';
 
 interface Metadata {

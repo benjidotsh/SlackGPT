@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app
+    image: slackgpt
+    build: .

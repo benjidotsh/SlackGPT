@@ -37,20 +37,3 @@ jobs:
 
       - name: Lint
         run: npm run lint
-
-      - name: Deploy
-        uses: serverless/github-action@v3.1
-        with:
-          args: deploy
-        env:
-          # Credentials
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # App environment variables
-          NODE_ENV: ${{ vars.NODE_ENV }}
-          AWS_REGION: ${{ vars.AWS_REGION}}
-          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
-          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
-          SLACK_CLIENT_ID: ${{ vars.SLACK_CLIENT_ID }}
-          SLACK_CLIENT_SECRET: ${{ secrets.SLACK_CLIENT_SECRET }}
-          SLACK_STATE_SECRET: ${{ secrets.SLACK_STATE_SECRET }}

@@ -1,5 +1,25 @@
 /* eslint-disable import/prefer-default-export */
 
-import SlackService from './services/slack.service.js';
+import config from './config.js';
+import { SlackService } from './services/slack/index.js';
 
-export const { handler } = new SlackService();
+const slackService = new SlackService({
+  signingSecret: config.SLACK_SIGNING_SECRET,
+  clientId: config.SLACK_CLIENT_ID,
+  clientSecret: config.SLACK_CLIENT_SECRET,
+  stateSecret: config.SLACK_STATE_SECRET,
+  scopes: [
+    'app_mentions:read',
+    'channels:history',
+    'chat:write',
+    'groups:history',
+    'im:history',
+    'mpim:history',
+    'users:read',
+  ],
+  port: config.PORT,
+});
+
+slackService.start();
+
+console.log(`🤖 SlackGPT is running on port ${config.PORT}`);

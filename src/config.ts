@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
-import { cleanEnv, makeValidator, str } from 'envalid';
+import * as dotenv from 'dotenv-safe';
+import { cleanEnv, makeValidator, port, str } from 'envalid';
 
-dotenv.config();
+dotenv.config({ allowEmptyValues: true });
 
 const encryptionKey = makeValidator((key) => {
   if (![16, 24, 32].includes(key.length))
@@ -24,7 +24,6 @@ export default cleanEnv(process.env, {
     default: 'development',
     choices: ['development', 'production'],
   }),
-  AWS_REGION: str({ default: 'eu-west-1', devDefault: 'localhost' }),
   CRYPTO_KEY: encryptionKey({
     desc: 'Key used for encryption and decryption',
     devDefault: '?D(G+KbPeShVmYp3s6v9y&B&E)H@McQf',
@@ -33,4 +32,5 @@ export default cleanEnv(process.env, {
   SLACK_CLIENT_ID: str(),
   SLACK_CLIENT_SECRET: str(),
   SLACK_STATE_SECRET: str({ devDefault: 'NcRfUjXn2r5u8x/A?D(G-KaPdSgVkYp3' }),
+  PORT: port({ default: 3000 }),
 });

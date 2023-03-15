@@ -2,8 +2,3 @@ node_modules/
 dist/
 .eslintcache
 .env
-
-# Serverless
-.serverless/
-.dynamodb/
-.build/
