@@ -37,3 +37,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Deploy
+        uses: dokku/github-action@master
+        with:
+          git_remote_url: ${{ secrets.DOKKU_GIT_REMOTE_URL }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
