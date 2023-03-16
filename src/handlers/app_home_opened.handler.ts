@@ -1,5 +1,5 @@
 import Bolt from '@slack/bolt';
-import { prismaService } from 'services/index.js';
+import { prismaService } from '../services/index.js';
 import { configurationBlocks } from '../blocks/index.js';
 import { Handler } from './index.js';
 

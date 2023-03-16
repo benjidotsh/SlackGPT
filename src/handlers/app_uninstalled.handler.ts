@@ -1,4 +1,4 @@
-import { prismaService } from 'services/index.js';
+import { prismaService } from '../services/index.js';
 import { Handler } from './index.js';
 
 const appUninstalledHandler: Handler = {
