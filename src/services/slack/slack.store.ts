@@ -1,4 +1,5 @@
 import Bolt from '@slack/bolt';
+import { prismaService } from '../index.js';
 
 export const installationStore: Bolt.InstallationStore = {
   storeInstallation: async (installation) => {
@@ -6,16 +7,24 @@ export const installationStore: Bolt.InstallationStore = {
       installation.isEnterpriseInstall &&
       installation.enterprise !== undefined
     ) {
-      return putItem(Table.Workspace, {
-        Id: installation.enterprise.id,
-        Installation: installation,
+      await prismaService.workspace.create({
+        data: {
+          id: installation.enterprise.id,
+          installation: installation as object,
+        },
       });
+
+      return;
     }
     if (installation.team !== undefined) {
-      return putItem<Workspace>(Table.Workspace, {
-        Id: installation.team.id,
-        Installation: installation,
+      await prismaService.workspace.create({
+        data: {
+          id: installation.team.id,
+          installation: installation as object,
+        },
       });
+
+      return;
     }
     throw new Error('Failed saving installation data to installationStore');
   },
@@ -24,18 +33,24 @@ export const installationStore: Bolt.InstallationStore = {
       installQuery.isEnterpriseInstall &&
       installQuery.enterpriseId !== undefined
     ) {
-      const workspace = await getItem<Workspace>(Table.Workspace, {
-        Id: installQuery.enterpriseId,
+      const workspace = await prismaService.workspace.findUnique({
+        where: {
+          id: installQuery.enterpriseId,
+        },
       });
 
-      if (workspace) return workspace.Installation;
+      if (workspace)
+        return workspace.installation as unknown as Bolt.Installation;
     }
     if (installQuery.teamId !== undefined) {
-      const workspace = await getItem<Workspace>(Table.Workspace, {
-        Id: installQuery.teamId,
+      const workspace = await prismaService.workspace.findUnique({
+        where: {
+          id: installQuery.teamId,
+        },
       });
 
-      if (workspace) return workspace.Installation;
+      if (workspace)
+        return workspace.installation as unknown as Bolt.Installation;
     }
     throw new Error('Failed fetching installation');
   },
@@ -44,12 +59,18 @@ export const installationStore: Bolt.InstallationStore = {
       installQuery.isEnterpriseInstall &&
       installQuery.enterpriseId !== undefined
     ) {
-      return deleteItem(Table.Workspace, {
-        Id: installQuery.enterpriseId,
+      await prismaService.workspace.delete({
+        where: { id: installQuery.enterpriseId },
       });
+
+      return;
     }
     if (installQuery.teamId !== undefined) {
-      return deleteItem(Table.Workspace, { Id: installQuery.teamId });
+      await prismaService.workspace.delete({
+        where: { id: installQuery.teamId },
+      });
+
+      return;
     }
     throw new Error('Failed to delete installation');
   },
