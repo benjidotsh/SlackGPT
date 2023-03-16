@@ -7,6 +7,7 @@ import {
   setOpenaiApiKeyHandler,
 } from '../../handlers/index.js';
 import { installationStore } from './index.js';
+import config from '../../config.js';
 
 export default class SlackService {
   private app: Bolt.App;
@@ -17,6 +18,7 @@ export default class SlackService {
       installerOptions: {
         directInstall: true,
       },
+      logLevel: config.LOG_LEVEL as Bolt.LogLevel,
       ...options,
     });
 

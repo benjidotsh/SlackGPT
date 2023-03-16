@@ -14,7 +14,7 @@ jobs:
     name: CI
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    environment: production
+    environment: Production
 
     steps:
       - name: Check out code

@@ -36,4 +36,9 @@ export default cleanEnv(process.env, {
   DATABASE_URL: url({
     devDefault: 'postgresql://postgres:postgres@localhost/slackgpt',
   }),
+  LOG_LEVEL: str({
+    default: 'warn',
+    devDefault: 'debug',
+    choices: ['error', 'warn', 'info', 'debug'],
+  }),
 });
