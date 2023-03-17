@@ -32,6 +32,10 @@ export default class SlackService {
     });
 
     this.registerHandlers();
+
+    this.app.error(async (error) => {
+      console.error(error);
+    });
   }
 
   start(): void {
