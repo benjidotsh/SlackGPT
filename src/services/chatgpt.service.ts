@@ -1,4 +1,7 @@
+// Required for Node 16
+import 'node-self';
 import 'unfetch/polyfill';
+
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
 
 export default class ChatGPTService {
