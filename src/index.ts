@@ -6,15 +6,6 @@ const slackService = new SlackService({
   clientId: config.SLACK_CLIENT_ID,
   clientSecret: config.SLACK_CLIENT_SECRET,
   stateSecret: config.SLACK_STATE_SECRET,
-  scopes: [
-    'app_mentions:read',
-    'channels:history',
-    'chat:write',
-    'groups:history',
-    'im:history',
-    'mpim:history',
-    'users:read',
-  ],
   port: config.PORT,
 });
 

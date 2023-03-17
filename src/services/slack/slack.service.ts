@@ -14,6 +14,15 @@ export default class SlackService {
 
   constructor(options: Bolt.AppOptions) {
     this.app = new Bolt.App({
+      scopes: [
+        'app_mentions:read',
+        'channels:history',
+        'chat:write',
+        'groups:history',
+        'im:history',
+        'mpim:history',
+        'users:read',
+      ],
       installationStore,
       installerOptions: {
         directInstall: true,
