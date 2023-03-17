@@ -1,8 +1,18 @@
 // Required for Node 16
 import 'node-self';
-import 'unfetch/polyfill';
+import fetch, { RequestInfo, RequestInit, Response } from 'node-fetch';
 
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
+
+// Required for Node 16
+declare global {
+  function fetch(
+    url: URL | RequestInfo,
+    init?: RequestInit | undefined
+  ): Promise<Response>;
+}
+
+if (!globalThis.fetch) globalThis.fetch = fetch;
 
 export default class ChatGPTService {
   private api: ChatGPTAPI;
