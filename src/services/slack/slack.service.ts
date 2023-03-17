@@ -1,6 +1,6 @@
 import Bolt from '@slack/bolt';
-import { getSlackLogLevel } from 'utils/index.js';
-import SentryService from 'services/sentry.service.js';
+import { getSlackLogLevel } from '../../utils/index.js';
+import { SentryService } from '../index.js';
 import { configurationMiddleware } from '../../middleware/index.js';
 import {
   appHomeOpenedHandler,
