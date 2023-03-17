@@ -42,4 +42,7 @@ export default cleanEnv(process.env, {
     devDefault: 'debug',
     choices: ['error', 'warn', 'info', 'verbose', 'debug'],
   }),
+  SENTRY_DSN: url({
+    default: undefined,
+  }),
 });

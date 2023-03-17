@@ -1,5 +1,6 @@
 import Bolt from '@slack/bolt';
 import { getSlackLogLevel } from 'utils/index.js';
+import SentryService from 'services/sentry.service.js';
 import { configurationMiddleware } from '../../middleware/index.js';
 import {
   appHomeOpenedHandler,
@@ -35,6 +36,11 @@ export default class SlackService {
 
     this.app.error(async (error) => {
       console.error(error);
+      SentryService.captureException(error, {
+        tags: {
+          service: 'slack',
+        },
+      });
     });
   }
 
