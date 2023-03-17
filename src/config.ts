@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv-safe';
+import * as dotenv from 'dotenv';
 import { cleanEnv, makeValidator, port, str, url } from 'envalid';
 
-dotenv.config({ allowEmptyValues: true });
+dotenv.config();
 
 const encryptionKey = makeValidator((key) => {
   if (![16, 24, 32].includes(key.length))
@@ -32,7 +32,8 @@ export default cleanEnv(process.env, {
   SLACK_CLIENT_ID: str(),
   SLACK_CLIENT_SECRET: str(),
   SLACK_STATE_SECRET: str({ devDefault: 'NcRfUjXn2r5u8x/A?D(G-KaPdSgVkYp3' }),
-  PORT: port({ default: 3000 }),
+  SLACK_APP_TOKEN: str({ default: undefined }),
+  PORT: port({ default: 3000, devDefault: undefined }),
   DATABASE_URL: url({
     devDefault: 'postgresql://postgres:postgres@localhost/slackgpt',
   }),

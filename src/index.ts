@@ -6,7 +6,14 @@ const slackService = new SlackService({
   clientId: config.SLACK_CLIENT_ID,
   clientSecret: config.SLACK_CLIENT_SECRET,
   stateSecret: config.SLACK_STATE_SECRET,
-  port: config.PORT,
+  ...(config.isDevelopment
+    ? {
+        socketMode: true,
+        appToken: config.SLACK_APP_TOKEN,
+      }
+    : {
+        port: config.PORT,
+      }),
 });
 
 slackService.start();

@@ -35,14 +35,13 @@
     "@slack/bolt": "^3.12.2",
     "chatgpt": "^5.0.6",
     "crypto-js": "^4.1.1",
-    "dotenv-safe": "^8.2.0",
+    "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
     "isomorphic-fetch": "^3.0.0",
     "node-self": "^1.0.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
-    "@types/dotenv-safe": "^8.1.2",
     "@types/jest": "^29.2.6",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
