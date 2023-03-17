@@ -1,4 +1,5 @@
 import Bolt from '@slack/bolt';
+import { getSlackLogLevel } from 'utils/index.js';
 import { configurationMiddleware } from '../../middleware/index.js';
 import {
   appHomeOpenedHandler,
@@ -7,7 +8,6 @@ import {
   setOpenaiApiKeyHandler,
 } from '../../handlers/index.js';
 import { installationStore } from './index.js';
-import config from '../../config.js';
 
 export default class SlackService {
   private app: Bolt.App;
@@ -27,7 +27,7 @@ export default class SlackService {
       installerOptions: {
         directInstall: true,
       },
-      logLevel: config.LOG_LEVEL as Bolt.LogLevel,
+      logLevel: getSlackLogLevel(),
       ...options,
     });
 

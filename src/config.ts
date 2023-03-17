@@ -40,6 +40,6 @@ export default cleanEnv(process.env, {
   LOG_LEVEL: str({
     default: 'warn',
     devDefault: 'debug',
-    choices: ['error', 'warn', 'info', 'debug'],
+    choices: ['error', 'warn', 'info', 'verbose', 'debug'],
   }),
 });
