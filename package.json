@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node dist/index.js",
@@ -36,7 +36,8 @@
     "chatgpt": "^5.0.6",
     "crypto-js": "^4.1.1",
     "dotenv-safe": "^8.2.0",
-    "envalid": "^7.3.1"
+    "envalid": "^7.3.1",
+    "unfetch": "^5.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
