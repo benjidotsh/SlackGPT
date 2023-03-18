@@ -9,10 +9,8 @@
 npm run dev:db
 # Run in development mode
 npm run dev:node
-# Start ngrok
-npm run dev:ngrok
 
-# ... or just run all at once
+# ... or just do both at once
 npm run dev
 ```
 
