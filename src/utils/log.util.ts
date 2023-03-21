@@ -21,14 +21,14 @@ export function getSlackLogLevel(): Bolt.LogLevel {
 export function getPrismaLogLevel(): Prisma.LogLevel[] {
   switch (config.LOG_LEVEL) {
     case 'error':
-      return ['query', 'info', 'warn', 'error'];
+      return ['error'];
     case 'warn':
-      return ['query', 'info', 'warn'];
+      return ['warn', 'error'];
     case 'info':
-      return ['query', 'info'];
+      return ['info', 'warn', 'error'];
     case 'verbose':
     case 'debug':
-      return ['query'];
+      return ['query', 'info', 'warn', 'error'];
     default:
       throw new Error('Invalid log level');
   }
