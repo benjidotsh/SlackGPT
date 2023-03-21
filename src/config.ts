@@ -45,4 +45,7 @@ export default cleanEnv(process.env, {
   SENTRY_DSN: url({
     default: undefined,
   }),
+  REDIS_URL: url({
+    devDefault: 'redis://localhost',
+  }),
 });

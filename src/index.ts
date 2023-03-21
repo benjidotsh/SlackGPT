@@ -6,7 +6,7 @@ const slackService = new SlackService({
   clientId: config.SLACK_CLIENT_ID,
   clientSecret: config.SLACK_CLIENT_SECRET,
   stateSecret: config.SLACK_STATE_SECRET,
-  ...(config.isDevelopment
+  ...(config.SLACK_APP_TOKEN
     ? {
         socketMode: true,
         appToken: config.SLACK_APP_TOKEN,

@@ -3,6 +3,9 @@ import 'node-self';
 import 'isomorphic-fetch';
 
 import { ChatGPTAPI, ChatMessage, SendMessageOptions } from 'chatgpt';
+import Keyv from 'keyv';
+import KeyvRedis from '@keyv/redis';
+import config from '../config.js';
 
 export default class ChatGPTService {
   private api: ChatGPTAPI;
@@ -10,6 +13,10 @@ export default class ChatGPTService {
   constructor(apiKey: string) {
     this.api = new ChatGPTAPI({
       apiKey,
+      messageStore: new Keyv({
+        store: new KeyvRedis(config.REDIS_URL),
+        namespace: 'chatgpt',
+      }),
     });
   }
 
