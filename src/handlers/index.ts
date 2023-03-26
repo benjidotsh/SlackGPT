@@ -15,7 +15,9 @@ interface EventHandler<EventType extends string> {
 export type Handler<EventType extends string | undefined = undefined> =
   EventType extends string ? EventHandler<EventType> : ActionHandler;
 
+export * from './shared.handler.js';
 export { default as appHomeOpenedHandler } from './app_home_opened.handler.js';
-export { default as appMentionHandler } from './app_mention.handler.js';
-export { default as appUninstalledHandler } from './app_uninstalled.handler.js';
 export { default as setOpenaiApiKeyHandler } from './set_openai_api_key.handler.js';
+export { default as appMentionHandler } from './app_mention.handler.js';
+export { default as messageImHandler } from './message_im.handler.js';
+export { default as appUninstalledHandler } from './app_uninstalled.handler.js';

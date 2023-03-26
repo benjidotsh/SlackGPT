@@ -6,6 +6,7 @@ import {
   appHomeOpenedHandler,
   appMentionHandler,
   appUninstalledHandler,
+  messageImHandler,
   setOpenaiApiKeyHandler,
 } from '../../handlers/index.js';
 import { installationStore } from './index.js';
@@ -58,6 +59,11 @@ export default class SlackService {
       appMentionHandler.name,
       configurationMiddleware,
       appMentionHandler.handler
+    );
+    this.app.event(
+      messageImHandler.name,
+      configurationMiddleware,
+      messageImHandler.handler
     );
     this.app.action(appUninstalledHandler.name, appUninstalledHandler.handler);
   }

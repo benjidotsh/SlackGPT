@@ -6,19 +6,22 @@ export default async function openaiMiddleware({
   client,
   context,
   next,
-}: Bolt.SlackEventMiddlewareArgs<'app_mention'> & Bolt.AllMiddlewareArgs) {
+}: Bolt.SlackEventMiddlewareArgs<'app_mention' | 'message'> &
+  Bolt.AllMiddlewareArgs) {
+  const messageEvent = event as Bolt.GenericMessageEvent;
+
   const workspace = await prismaService.workspace.findUnique({
     where: {
-      id: event.team,
+      id: messageEvent.team,
     },
   });
 
   if (!workspace?.apiKey) {
     client.chat.postEphemeral({
       text: 'SlackGPT is not configured in this workspace yet. Please contact your workspace admin.',
-      channel: event.channel,
-      user: event.user as string,
-      thread_ts: event.thread_ts,
+      channel: messageEvent.channel,
+      user: messageEvent.user,
+      thread_ts: messageEvent.thread_ts,
     });
 
     return;

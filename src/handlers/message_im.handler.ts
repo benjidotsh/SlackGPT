@@ -1,11 +1,13 @@
 import { handleMessageEvent, Handler } from './index.js';
 
-const appMentionHandler: Handler<'app_mention'> = {
-  name: 'app_mention',
+const messageImHandler: Handler<'message'> = {
+  name: 'message',
   type: 'event',
   handler: async (args) => {
+    if (args.event.channel_type !== 'im') return;
+
     await handleMessageEvent(args);
   },
 };
 
-export default appMentionHandler;
+export default messageImHandler;
