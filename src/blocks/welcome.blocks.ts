@@ -26,7 +26,7 @@ const welcomeBlocks: (Bolt.Block | Bolt.KnownBlock)[] = [
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: ":speech_balloon: Talk to me in a DM and I'll respond right away.",
+      text: ":speech_balloon: Send me a DM and I'll respond right away.",
     },
   },
   {
