@@ -1,6 +1,8 @@
 import Bolt from '@slack/bolt';
 import { Workspace } from '@prisma/client';
+import { ChatGPTError } from 'chatgpt';
 import { ChatGPTService, SlackService } from '../services/index.js';
+import { errorBlocks } from '../blocks/index.js';
 
 interface Metadata {
   event_type: 'slackgpt_reply';
@@ -17,58 +19,75 @@ export async function handleMessageEvent({
   Bolt.AllMiddlewareArgs) {
   const messageEvent = event as Bolt.GenericMessageEvent & { text: string };
 
-  let parentMessageId: string | undefined;
+  try {
+    let parentMessageId: string | undefined;
 
-  if (messageEvent.thread_ts) {
-    let replies = await client.conversations.replies({
-      channel: messageEvent.channel,
-      ts: messageEvent.thread_ts,
-      include_all_metadata: true,
-    });
-
-    let { messages = [] } = replies;
-
-    while (replies.has_more) {
-      // eslint-disable-next-line no-await-in-loop
-      replies = await client.conversations.replies({
+    if (messageEvent.thread_ts) {
+      let replies = await client.conversations.replies({
         channel: messageEvent.channel,
         ts: messageEvent.thread_ts,
         include_all_metadata: true,
-        cursor: replies.response_metadata?.next_cursor,
       });
 
-      messages = messages.concat(replies.messages || []);
+      let { messages = [] } = replies;
+
+      while (replies.has_more) {
+        // eslint-disable-next-line no-await-in-loop
+        replies = await client.conversations.replies({
+          channel: messageEvent.channel,
+          ts: messageEvent.thread_ts,
+          include_all_metadata: true,
+          cursor: replies.response_metadata?.next_cursor,
+        });
+
+        messages = messages.concat(replies.messages || []);
+      }
+
+      const parentMessageMetadata = messages
+        .reverse()
+        .find((message) => message.metadata?.event_type === 'slackgpt_reply')
+        ?.metadata as Metadata | undefined;
+
+      parentMessageId = parentMessageMetadata?.event_payload.messageId;
     }
 
-    const parentMessageMetadata = messages
-      .reverse()
-      .find((message) => message.metadata?.event_type === 'slackgpt_reply')
-      ?.metadata as Metadata | undefined;
+    const message = SlackService.parseSlackMessage(messageEvent.text);
 
-    parentMessageId = parentMessageMetadata?.event_payload.messageId;
-  }
+    const { apiKey } = context.workspace as Workspace & {
+      apiKey: string;
+    };
 
-  const message = SlackService.parseSlackMessage(messageEvent.text);
+    const { text: response, id: messageId } = await new ChatGPTService(
+      apiKey
+    ).sendMessage(message, {
+      parentMessageId,
+    });
 
-  const { apiKey } = context.workspace as Workspace & {
-    apiKey: string;
-  };
-
-  const { text: response, id: messageId } = await new ChatGPTService(
-    apiKey
-  ).sendMessage(message, {
-    parentMessageId,
-  });
-
-  await client.chat.postMessage({
-    channel: messageEvent.channel,
-    thread_ts: messageEvent.thread_ts || messageEvent.ts,
-    text: response,
-    metadata: {
-      event_type: 'slackgpt_reply',
-      event_payload: {
-        messageId,
+    await client.chat.postMessage({
+      channel: messageEvent.channel,
+      thread_ts: messageEvent.thread_ts || messageEvent.ts,
+      text: response,
+      metadata: {
+        event_type: 'slackgpt_reply',
+        event_payload: {
+          messageId,
+        },
       },
-    },
-  });
+    });
+  } catch (e) {
+    if (e instanceof ChatGPTError) {
+      await client.chat.postMessage({
+        channel: messageEvent.channel,
+        thread_ts: messageEvent.thread_ts || messageEvent.ts,
+        blocks: errorBlocks(
+          'ChatGPT failed to respond.',
+          'Please try again later. If the problem persists, please contact your workspace admin.'
+        ),
+      });
+
+      return;
+    }
+
+    throw e;
+  }
 }

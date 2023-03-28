@@ -6,7 +6,7 @@ function configurationBlocks(isSet: boolean): (Bolt.Block | Bolt.KnownBlock)[] {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: 'Configuration',
+        text: 'Workspace settings',
       },
     },
     {

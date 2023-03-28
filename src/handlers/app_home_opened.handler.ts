@@ -1,6 +1,6 @@
 import Bolt from '@slack/bolt';
 import { prismaService } from '../services/index.js';
-import { configurationBlocks } from '../blocks/index.js';
+import { configurationBlocks, welcomeBlocks } from '../blocks/index.js';
 import { Handler } from './index.js';
 
 const appHomeOpenedHandler: Handler<'app_home_opened'> = {
@@ -8,6 +8,9 @@ const appHomeOpenedHandler: Handler<'app_home_opened'> = {
   type: 'event',
   handler: async ({ event, client, context }) => {
     const blocks: (Bolt.Block | Bolt.KnownBlock)[] = [];
+
+    // Welcome
+    blocks.push(...welcomeBlocks);
 
     // Configuration
     const { user } = await client.users.info({ user: event.user });

@@ -1,4 +1,5 @@
 import Bolt from '@slack/bolt';
+import { errorBlocks } from '../blocks/index.js';
 import { CryptoService, prismaService } from '../services/index.js';
 
 export default async function openaiMiddleware({
@@ -17,11 +18,14 @@ export default async function openaiMiddleware({
   });
 
   if (!workspace?.apiKey) {
-    client.chat.postEphemeral({
-      text: 'SlackGPT is not configured in this workspace yet. Please contact your workspace admin.',
+    await client.chat.postMessage({
       channel: messageEvent.channel,
-      user: messageEvent.user,
-      thread_ts: messageEvent.thread_ts,
+      thread_ts: messageEvent.thread_ts || messageEvent.ts,
+      blocks: errorBlocks(
+        'SlackGPT is not configured in this workspace yet.',
+        'Please contact your workspace admin.',
+        'gear'
+      ),
     });
 
     return;

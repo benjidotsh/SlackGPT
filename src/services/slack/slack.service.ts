@@ -37,11 +37,7 @@ export default class SlackService {
 
     this.app.error(async (error) => {
       console.error(error);
-      SentryService.captureException(error, {
-        tags: {
-          service: 'slack',
-        },
-      });
+      SentryService.captureException(error);
     });
   }
 
