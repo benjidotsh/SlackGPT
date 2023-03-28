@@ -33,7 +33,7 @@ const welcomeBlocks: (Bolt.Block | Bolt.KnownBlock)[] = [
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: ':busts_in_silhouette: In a DM with other people, tag me with `@SlackGPT`.',
+      text: ":busts_in_silhouette: In DM's with other people, tag me with `@SlackGPT`.",
     },
   },
   {
