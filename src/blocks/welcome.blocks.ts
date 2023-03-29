@@ -43,55 +43,6 @@ const welcomeBlocks: (Bolt.Block | Bolt.KnownBlock)[] = [
       text: ':loudspeaker: In public and private channels, tag me with `@SlackGPT`.',
     },
   },
-  {
-    type: 'header',
-    text: {
-      type: 'plain_text',
-      text: 'Here are some ideas to get you started:',
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: '• Ask me for a fun fact about anything!',
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: "• Need help with brainstorming? Tell me about your project and I'll generate some ideas for you!",
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: '• Feeling bored? Ask me to tell you a joke or a riddle!',
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: "• Need a quick summary of a news article you don't have time to read? Send me the content of the article and I'll generate one for you!",
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: '• Want to learn a new language? Ask me to translate a phrase for you!',
-    },
-  },
-  {
-    type: 'section',
-    text: {
-      type: 'mrkdwn',
-      text: "• Want to improve your writing? Send me a paragraph and I'll suggest edits to make it more readable!",
-    },
-  },
 ];
 
 export default welcomeBlocks;

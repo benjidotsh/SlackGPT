@@ -24,6 +24,7 @@ export default class SlackService {
         'im:history',
         'mpim:history',
         'users:read',
+        'chat:write.public',
       ],
       installationStore,
       installerOptions: {

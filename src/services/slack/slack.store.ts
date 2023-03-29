@@ -7,8 +7,14 @@ export const installationStore: Bolt.InstallationStore = {
       installation.isEnterpriseInstall &&
       installation.enterprise !== undefined
     ) {
-      await prismaService.workspace.create({
-        data: {
+      await prismaService.workspace.upsert({
+        where: {
+          id: installation.enterprise.id,
+        },
+        update: {
+          installation: installation as object,
+        },
+        create: {
           id: installation.enterprise.id,
           installation: installation as object,
         },
@@ -17,8 +23,14 @@ export const installationStore: Bolt.InstallationStore = {
       return;
     }
     if (installation.team !== undefined) {
-      await prismaService.workspace.create({
-        data: {
+      await prismaService.workspace.upsert({
+        where: {
+          id: installation.team.id,
+        },
+        update: {
+          installation: installation as object,
+        },
+        create: {
           id: installation.team.id,
           installation: installation as object,
         },
