@@ -14,8 +14,11 @@ import { installationStore } from './index.js';
 export default class SlackService {
   private app: Bolt.App;
 
+  private static _scopeVersion = 1;
+
   constructor(options: Bolt.AppOptions) {
     this.app = new Bolt.App({
+      // when updating scopes, make sure to increment scopeVersion
       scopes: [
         'app_mentions:read',
         'channels:history',
@@ -70,5 +73,9 @@ export default class SlackService {
    */
   static parseSlackMessage(message: string): string {
     return message.replace(/\s*<@[UW][A-Z0-9]{2,}>\s*/g, ' ').trim();
+  }
+
+  static get scopeVersion() {
+    return this._scopeVersion;
   }
 }

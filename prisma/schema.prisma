@@ -11,4 +11,5 @@ model Workspace {
   id            String    @id
   installation  Json
   apiKey        String?
+  scopeVersion  Int       @default(0)
 }
