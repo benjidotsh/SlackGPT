@@ -1,7 +1,5 @@
 # [🤖 Add SlackGPT to Slack](https://slackgpt.benji.sh/slack/install)
 
----
-
 # SlackGPT
 
 ## Getting started
