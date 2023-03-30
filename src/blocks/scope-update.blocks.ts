@@ -13,7 +13,7 @@ const scopeUpdateBlocks: (Bolt.Block | Bolt.KnownBlock)[] = [
         type: 'plain_text',
         text: 'Reinstall SlackGPT',
       },
-      url: 'https://slackgpt.vps.benji.sh/slack/install',
+      url: 'https://slackgpt.benji.sh/slack/install',
     },
   },
   {
