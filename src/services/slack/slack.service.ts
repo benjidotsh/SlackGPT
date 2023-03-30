@@ -11,24 +11,23 @@ import {
 } from '../../handlers/index.js';
 import { installationStore } from './index.js';
 
+export const requiredScopes = [
+  'app_mentions:read',
+  'channels:history',
+  'chat:write',
+  'groups:history',
+  'im:history',
+  'mpim:history',
+  'users:read',
+  'chat:write.public',
+];
+
 export default class SlackService {
   private app: Bolt.App;
 
-  private static _scopeVersion = 1;
-
   constructor(options: Bolt.AppOptions) {
     this.app = new Bolt.App({
-      // when updating scopes, make sure to increment scopeVersion
-      scopes: [
-        'app_mentions:read',
-        'channels:history',
-        'chat:write',
-        'groups:history',
-        'im:history',
-        'mpim:history',
-        'users:read',
-        'chat:write.public',
-      ],
+      scopes: requiredScopes,
       installationStore,
       installerOptions: {
         directInstall: true,
@@ -73,9 +72,5 @@ export default class SlackService {
    */
   static parseSlackMessage(message: string): string {
     return message.replace(/\s*<@[UW][A-Z0-9]{2,}>\s*/g, ' ').trim();
-  }
-
-  static get scopeVersion() {
-    return this._scopeVersion;
   }
 }

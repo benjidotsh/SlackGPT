@@ -1,5 +1,5 @@
 import Bolt from '@slack/bolt';
-import { prismaService, SlackService } from '../index.js';
+import { prismaService } from '../index.js';
 
 export const installationStore: Bolt.InstallationStore = {
   storeInstallation: async (installation) => {
@@ -12,13 +12,11 @@ export const installationStore: Bolt.InstallationStore = {
           id: installation.enterprise.id,
         },
         update: {
-          installation: installation as object,
-          scopeVersion: SlackService.scopeVersion,
+          installation,
         },
         create: {
           id: installation.enterprise.id,
-          installation: installation as object,
-          scopeVersion: SlackService.scopeVersion,
+          installation,
         },
       });
 
@@ -30,13 +28,11 @@ export const installationStore: Bolt.InstallationStore = {
           id: installation.team.id,
         },
         update: {
-          installation: installation as object,
-          scopeVersion: SlackService.scopeVersion,
+          installation,
         },
         create: {
           id: installation.team.id,
-          installation: installation as object,
-          scopeVersion: SlackService.scopeVersion,
+          installation,
         },
       });
 

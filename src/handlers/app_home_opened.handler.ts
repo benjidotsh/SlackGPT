@@ -1,11 +1,12 @@
 import Bolt from '@slack/bolt';
-import { prismaService, SlackService } from '../services/index.js';
+import { prismaService } from '../services/index.js';
 import {
   configurationBlocks,
   scopeUpdateBlocks,
   welcomeBlocks,
 } from '../blocks/index.js';
 import { Handler } from './index.js';
+import { areRequiredScopesPresent } from '../utils/index.js';
 
 const appHomeOpenedHandler: Handler<'app_home_opened'> = {
   name: 'app_home_opened',
@@ -21,7 +22,10 @@ const appHomeOpenedHandler: Handler<'app_home_opened'> = {
     const blocks: (Bolt.Block | Bolt.KnownBlock)[] = [];
 
     // Scope update
-    if (user?.is_admin && workspace.scopeVersion < SlackService.scopeVersion)
+    if (
+      user?.is_admin &&
+      !areRequiredScopesPresent(workspace.installation.bot!.scopes)
+    )
       blocks.push(...scopeUpdateBlocks);
 
     // Welcome

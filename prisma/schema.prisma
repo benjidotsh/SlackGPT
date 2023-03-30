@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -9,7 +13,7 @@ datasource db {
 
 model Workspace {
   id            String    @id
+  /// [Installation]
   installation  Json
   apiKey        String?
-  scopeVersion  Int       @default(0)
 }
